@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Katana</string>
+    <string name="desc_toolbar">تطبيق مبرمج بلغة السي و كولتن لإضافة Re-Malwack</string>
+    <string name="daemonTogglebtn">تشغيل Katamari</string>
+    <string name="enterapppackagetorm">أدخل اسم التطبق للإزالة</string>
+    <string name="enterapppackagetoadd">أدخل اسم التطبيق لإضافته</string>
+    <string name="import_btn">استيراد</string>
+    <string name="export_btn">تصدير</string>
+    <string name="failedtogetroot">غشل في الحصول على صلاحيات الجذر</string>
+    <string name="closetheapp">إغلاق التطبيق</string>
+    <string name="successstartingkatamari">تم تفعيل خدمة Katamari بنجاح</string>
+    <string name="failureinstartingkatamari">فشل في تشغيل خدمة Katamari الرجاء إعادة المحاولة</string>
+    <string name="stoppedkatamarisuccessfully">تم إيقاف خدمة Katamari بنجاح</string>
+    <string name="failedtostopkatamariservice">فشل في إيقاف خدمة Katamari الرجاء إعادة المحاولة</string>
+</resources>

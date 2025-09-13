@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Katana</string>
+    <string name="desc_toolbar">A app written in C and Kotlin for Re-Malwack.</string>
+    <string name="daemonTogglebtn">Enable Katamari</string>
+    <string name="enterapppackagetorm">Enter package name to remove</string>
+    <string name="enterapppackagetoadd">Enter package name to add</string>
+    <string name="import_btn">Import</string>
+    <string name="export_btn">Export</string>
+    <string name="failedtogetroot">Failed to get root permissions.</string>
+    <string name="closetheapp">Close the app</string>
+    <string name="successstartingkatamari">Successfully started Katamari service.</string>
+    <string name="failureinstartingkatamari">Failed to start Katamari service, please try again.</string>
+    <string name="stoppedkatamarisuccessfully">Successfully stopped Katamari service.</string>
+    <string name="failedtostopkatamariservice">Failed to stop Katamari service, please try again.</string>
+</resources>

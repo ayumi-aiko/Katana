@@ -7,6 +7,7 @@
     <string name="import_btn">استيراد</string>
     <string name="export_btn">تصدير</string>
     <string name="failedtogetroot">فشل في الحصول على صلاحيات الجذر</string>
+    <string name="modulenotfound">لم يتم العثور على وحدة Re-Malwack، يرجى تثبيتها والمحاولة مرة أخرى</string>
     <string name="closetheapp">إغلاق التطبيق</string>
     <string name="successstartingkatamari">تم تفعيل خدمة Katamari بنجاح</string>
     <string name="failureinstartingkatamari">فشل في تشغيل خدمة Katamari الرجاء إعادة المحاولة</string>

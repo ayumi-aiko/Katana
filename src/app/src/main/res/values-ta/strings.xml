@@ -7,6 +7,7 @@
     <string name="import_btn">Import</string>
     <string name="export_btn">Export</string>
     <string name="failedtogetroot">Root permission கிடைக்கல ❌</string>
+    <string name="modulenotfound">Re-Malwack Module கிடைக்கவில்லை, தயவுசெய்து அதை Install செய்து மீண்டும் முயற்சிக்கவும் ❌</string>
     <string name="closetheapp">App-ஐ Close பண்ணுங்க</string>
     <string name="successstartingkatamari">Katamari service Start ஆயிடுச்சு ✅</string>
     <string name="failureinstartingkatamari">Katamari service Start ஆகல, மீண்டும் Try பண்ணுங்க ❌</string>

@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     external fun removePackageFromList(packageToRemove: String): Boolean;
     external fun importPackageList(): Int;
     external fun exportPackageList(): Int;
+    external fun doesModuleExists(): Boolean
     external fun enableLogs(): Void
     //funcs
     fun Context.toast(resId: Int) =
@@ -50,6 +51,19 @@ class MainActivity : AppCompatActivity() {
             MaterialAlertDialogBuilder(this)
                 .setTitle("Katana")
                 .setMessage(this.getString(R.string.failedtogetroot))
+                .setCancelable(true)
+                .setPositiveButton(this.getString(R.string.closetheapp)) { _, which: Int ->
+                    finishAffinity();
+                }
+                .setOnCancelListener {
+                    finishAffinity();
+                }
+                .show();
+        }
+        if(!doesModuleExists()) {
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Katana")
+                .setMessage(this.getString(R.string.modulenotfound))
                 .setCancelable(true)
                 .setPositiveButton(this.getString(R.string.closetheapp)) { _, which: Int ->
                     finishAffinity();

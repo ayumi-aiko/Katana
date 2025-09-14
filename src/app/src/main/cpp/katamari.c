@@ -68,3 +68,13 @@ JNIEXPORT jint JNICALL Java_ishimi_katamari_MainActivity_exportPackageList(JNIEn
 JNIEXPORT jobject JNICALL Java_ishimi_katamari_MainActivity_enableLogs(JNIEnv *env, jobject thiz) {
     enableLogging = true;
 }
+
+JNIEXPORT jboolean JNICALL Java_ishimi_katamari_MainActivity_doesModuleExists(JNIEnv *env, jobject thiz) {
+    FILE *fptr = fopen("/data/adb/Re-Malwack/module.prop", "r");
+    if(!fptr) {
+        zeynaLog(LOG_LEVEL_ERROR, "doesModuleExists()", "Failed to open the module property file, please open the app again or just install Re-Malwack to proceed!");
+        return false;
+    }
+    fclose(fptr);
+    return true;
+}

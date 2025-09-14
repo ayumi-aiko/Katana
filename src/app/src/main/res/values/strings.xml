@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Katana</string>
+    <string name="app_name" translatable="false">Katana</string>
     <string name="desc_toolbar">A app written in C and Kotlin for Re-Malwack.</string>
     <string name="daemonTogglebtn">Enable Katamari</string>
     <string name="enterapppackagetorm">Enter package name to remove</string>
@@ -12,4 +12,13 @@
     <string name="failureinstartingkatamari">Failed to start Katamari service, please try again.</string>
     <string name="stoppedkatamarisuccessfully">Successfully stopped Katamari service.</string>
     <string name="failedtostopkatamariservice">Failed to stop Katamari service, please try again.</string>
+    <string name="importpkglists">Trying to import package lists..</string>
+    <string name="failedtoremovetempfile">Failed to remove temporary file from appdata.</string>
+    <string name="failedtocc2tempfile">Failed to copy content to temporary file.</string>
+    <string name="importfilenotfound">Import file not found at /sdcard! Put it there and name it katana.pkg</string>
+    <string name="successfullyimportpkglists">Successfully imported package lists..</string>
+    <string name="failedtoimportpkglists">Failed to import package lists..</string>
+    <string name="exportpkglists">Trying to export package lists..</string>
+    <string name="successfullyexportpkglists">Successfully exported package lists..</string>
+    <string name="failedexportpkglists">Failed to export package lists..</string>
 </resources>

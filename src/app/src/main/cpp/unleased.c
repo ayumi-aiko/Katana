@@ -6,7 +6,7 @@
 int putConfig(const char *variableName, int variableValue) {
     if(getTemporaryAccess(configScriptPath, true) != 0) return -1;
     if(getTemporaryAccess(configScriptPath, false) != 0) return -1;
-    FILE *fp = fopen("/sdcard/Android/data/ishimi.katamari/tempFile", "r");
+    FILE *fp = fopen(tempFileFromPackage, "r");
     if(!fp) {
         zeynaLog(LOG_LEVEL_ERROR, "putConfig", "Failed to open /sdcard/Android/data/ishimi.katamari/tempFile, please try again..");
         return 127;
@@ -38,7 +38,7 @@ int putConfig(const char *variableName, int variableValue) {
     }
     fclose(fp);
     bool found = false;
-    FILE *fptr = fopen("/sdcard/Android/data/ishimi.katamari/tempFile", "w");
+    FILE *fptr = fopen(tempFileFromPackage, "w");
     if(!fptr) {
         for(int i = 0; i < array; i++) free(contentsOfConfig[i]);
         zeynaLog(LOG_LEVEL_ERROR, "putConfig", "Failed to open /sdcard/Android/data/ishimi.katamari/tempFile, please try again..");
@@ -60,7 +60,7 @@ int putConfig(const char *variableName, int variableValue) {
     // let's just hope that it deletes the file...
     getTemporaryAccess(configScriptPath, true);
     // let's copy the file to replace with the new one. FUCK GOOGLE 😭
-    putFileIntoVoid("/sdcard/Android/data/ishimi.katamari/tempFile", configScriptPath);
+    putFileIntoVoid(tempFileFromPackage, configScriptPath);
     // more verbose but it does the j*b. Returns 0 if set!
     return (found) ? 0 : 1;
 }
@@ -68,10 +68,10 @@ int putConfig(const char *variableName, int variableValue) {
 int getTemporaryAccess(const char *filePath, bool removeTempFile) {
     int ret = 0;
     if(removeTempFile) {
-        if(system("su -c 'rm -rf /sdcard/Android/data/ishimi.katamari/tempFile'") != 0) return 125;
+        if(system("su -c 'rm -rf tempFileFromPackage'") != 0) return 125;
     }
     else {
-        char *cmd = combineStringsFormatted("su -c 'cp -af \"%s\" /sdcard/Android/data/ishimi.katamari/tempFile'",filePath);
+        char *cmd = combineStringsFormatted("su -c 'cp -af \"%s\" tempFileFromPackage'",filePath);
         if(!cmd) return 127;
         ret = system(cmd);
         if(ret != 0) {
@@ -115,26 +115,13 @@ int executeShellCommand(const char *command, const char *args[], bool requiresOu
     return 1;
 }
 
-bool eraseFileContent(const void *handle, bool isFD) {
-    if(isFD) {
-        int fd = *(const int *)handle;
-        return ftruncate(fd, 0) == 0;
-    }
-    else {
-        FILE *fptr = fopen((const char *)handle, "w");
-        if (!fptr) return false;
-        fclose(fptr);
-        return true;
-    }
-}
-
 int isPackageInList(const char *packageName) {
     if(getTemporaryAccess(daemonPackageLists, true) != 0) return -1;
     if(getTemporaryAccess(daemonPackageLists, false) != 0) return -1;
-    FILE *packageFile = fopen("/sdcard/Android/data/ishimi.katamari/tempFile", "r");
+    FILE *packageFile = fopen(tempFileFromPackage, "r");
     if(!packageFile) {
         zeynaLog(LOG_LEVEL_ERROR, "isPackageInList", "Failed to open the package lists file, please run this command again or report this issue to the devs.");
-        putFileIntoVoid("/sdcard/Android/data/ishimi.katamari/tempFile", daemonPackageLists);
+        putFileIntoVoid(tempFileFromPackage, daemonPackageLists);
         return 127;
     }
     char contentFromFile[8000];
@@ -142,36 +129,36 @@ int isPackageInList(const char *packageName) {
         contentFromFile[strcspn(contentFromFile, "\n")] = 0;
         if(strcmp(contentFromFile, packageName) == 0) {
             fclose(packageFile);
-            putFileIntoVoid("/sdcard/Android/data/ishimi.katamari/tempFile", daemonPackageLists);
+            putFileIntoVoid(tempFileFromPackage, daemonPackageLists);
             return 0;
         }
     }
     fclose(packageFile);
-    putFileIntoVoid("/sdcard/Android/data/ishimi.katamari/tempFile", daemonPackageLists);
+    putFileIntoVoid(tempFileFromPackage, daemonPackageLists);
     return 1;
 }
 
 int addPackageToList(const char *packageName) {
     if(getTemporaryAccess(daemonPackageLists, true) != 0) return -1;
     if(getTemporaryAccess(daemonPackageLists, false) != 0) return -1;
-    FILE *packageFile = fopen("/sdcard/Android/data/ishimi.katamari/tempFile", "a");
+    FILE *packageFile = fopen(tempFileFromPackage, "a");
     if(!packageFile) {
         zeynaLog(LOG_LEVEL_ERROR, "addPackageToList", "Failed to open the package lists file, please run this command again or report this issue to the devs.");
-        putFileIntoVoid("/sdcard/Android/data/ishimi.katamari/tempFile", daemonPackageLists);
+        putFileIntoVoid(tempFileFromPackage, daemonPackageLists);
         return 127;
     }
     if(isPackageInList(packageName) == 1) {
         fprintf(packageFile, "\n%s\n", packageName);
         zeynaLog(LOG_LEVEL_WARN, "addPackageToList", "Successfully added %s into the list, the daemon will add the packages to the list for a short period of time.");
         fclose(packageFile);
-        putFileIntoVoid("/sdcard/Android/data/ishimi.katamari/tempFile", daemonPackageLists);
+        putFileIntoVoid(tempFileFromPackage, daemonPackageLists);
         if(getTemporaryAccess(daemonPackageLists, true) != 0) return -1;
         return 0;
     }
     else {
         zeynaLog(LOG_LEVEL_WARN, "addPackageToList", "%s is already present in the lists, please try again with a different application.");
         fclose(packageFile);
-        putFileIntoVoid("/sdcard/Android/data/ishimi.katamari/tempFile", daemonPackageLists);
+        putFileIntoVoid(tempFileFromPackage, daemonPackageLists);
         if(getTemporaryAccess(daemonPackageLists, true) != 0) return -1;
         return 1;
     }
@@ -180,7 +167,7 @@ int addPackageToList(const char *packageName) {
 int removePackageFromList(const char *packageName) {
     if(getTemporaryAccess(daemonPackageLists, true) != 0) return -1;
     if(getTemporaryAccess(daemonPackageLists, false) != 0) return -1;
-    FILE *packageFile = fopen("/sdcard/Android/data/ishimi.katamari/tempFile", "r");
+    FILE *packageFile = fopen(tempFileFromPackage, "r");
     if(!packageFile) {
         zeynaLog(LOG_LEVEL_ERROR, "removePackageFromList", "Failed to open the package lists file, please run this command again or report this issue to the devs.");
         return 127;
@@ -220,6 +207,54 @@ int removePackageFromList(const char *packageName) {
         zeynaLog(LOG_LEVEL_INFO, "removePackageFromList", "Seems like the package was't present in the list. Failed to remove the given package.");
         return 1;
     }
+}
+
+int isValidPackageName(const char *name) {
+    size_t len = strlen(name);
+    if(len < 3) return 0;
+    int segmentLen = 0;
+    int segmentCount = 0;
+    for(size_t i = 0; i < len; i++) {
+        char c = name[i];
+        if(c == '.') {
+            if(segmentLen == 0 || i == len - 1) return 0;
+            segmentLen = 0;
+            segmentCount++;
+        }
+        else {
+            if(segmentLen == 0) {
+                if(!islower(c)) return 0;
+            }
+            else if(!(islower(c) || isdigit(c) || c == '_')) return 0;
+            segmentLen++;
+        }
+    }
+    return (segmentCount >= 1);
+}
+
+bool eraseFileContent(const void *handle, bool isFD) {
+    if(isFD) {
+        int fd = *(const int *)handle;
+        return ftruncate(fd, 0) == 0;
+    }
+    else {
+        FILE *fptr = fopen((const char *)handle, "w");
+        if (!fptr) return false;
+        fclose(fptr);
+        return true;
+    }
+}
+
+bool eraseFileContentEvilTwin(const char *filePath) {
+    if(!eraseFileContent(filePath, false)) {
+        executeShellCommand("su", (const char*[]) {"su", "-c", "rm", "-rf", filePath, NULL}, false);
+        return (executeShellCommand("su", (const char*[]) {"su", "-c", "echo", "", ">", filePath, NULL}, false) == 0);
+    }
+    return false;
+}
+
+bool removeFile(const char *filePath) {
+    return (executeShellCommand("su", (const char*[]) {"su", "-c", "rm", "-rf", filePath, NULL}, false) == 0);
 }
 
 // returns stack! please clean it!

@@ -10,3 +10,6 @@ Katana is an app that provides app-specific adblocking capabilities within the R
 ## Features
 - App-specific adblocking
 - Seamless Re-Malwack integration
+
+## Credits:
+[@ZG089](https://github.com/ZG089/) - For arabic translations

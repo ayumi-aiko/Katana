@@ -19,8 +19,7 @@ class MainActivity : AppCompatActivity() {
     external fun removePackageFromList(packageToRemove: String): Boolean;
     external fun importPackageList(): Int;
     external fun exportPackageList(): Int;
-    external fun doesModuleExists(): Boolean
-    external fun enableLogs(): Void
+    external fun doesModuleExists(): Boolean;
     //funcs
     fun Context.toast(resId: Int) =
         Toast.makeText(this, getString(resId), Toast.LENGTH_SHORT).show()

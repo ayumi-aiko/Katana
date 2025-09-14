@@ -15,6 +15,7 @@
 #include <fcntl.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <errno.h>
 
 // externs...
 extern bool enableLogging;

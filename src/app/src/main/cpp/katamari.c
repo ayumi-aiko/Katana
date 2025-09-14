@@ -11,7 +11,7 @@ const char *daemonLockFileFailure = "/data/adb/Re-Malwack/.daemon2";
 const char *configScriptPath = "/data/adb/Re-Malwack/scripts/config.sh";
 const char *tempFileFromPackage = "/sdcard/Android/data/ishimi.katamari/files/mngrmlwk/tempFile";
 const char *currentDaemonPIDFile = "/data/adb/Re-Malwack/currentDaemonPID";
-const char *daemonStarterScript = "/data/adb/Re-Malwack/daemonStarter.sh";
+const char *daemonStarterScript = "/data/adb/Re-Malwack/daemonStarter";
 
 JNIEXPORT jboolean JNICALL Java_ishimi_katamari_MainActivity_testRoot(JNIEnv *env, jobject thiz) {
     return (system("su -c echo hi") == 0);

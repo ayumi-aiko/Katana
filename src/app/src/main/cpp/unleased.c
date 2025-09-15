@@ -209,29 +209,6 @@ int removePackageFromList(const char *packageName) {
     }
 }
 
-int isValidPackageName(const char *name) {
-    size_t len = strlen(name);
-    if(len < 3) return 0;
-    int segmentLen = 0;
-    int segmentCount = 0;
-    for(size_t i = 0; i < len; i++) {
-        char c = name[i];
-        if(c == '.') {
-            if(segmentLen == 0 || i == len - 1) return 0;
-            segmentLen = 0;
-            segmentCount++;
-        }
-        else {
-            if(segmentLen == 0) {
-                if(!islower(c)) return 0;
-            }
-            else if(!(islower(c) || isdigit(c) || c == '_')) return 0;
-            segmentLen++;
-        }
-    }
-    return (segmentCount >= 1);
-}
-
 bool eraseFileContent(const void *handle, bool isFD) {
     if(isFD) {
         int fd = *(const int *)handle;

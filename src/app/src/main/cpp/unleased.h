@@ -42,7 +42,6 @@ int executeShellCommand(const char *command, const char *args[], bool requiresOu
 int isPackageInList(const char *packageName);
 int addPackageToList(const char *packageName);
 int removePackageFromList(const char *packageName);
-int isValidPackageName(const char *name);
 bool eraseFileContent(const void *handle, bool isFD);
 bool eraseFileContentEvilTwin(const char *filePath);
 bool removeFile(const char *filePath);

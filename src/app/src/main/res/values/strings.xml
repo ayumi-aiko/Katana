@@ -7,7 +7,7 @@
     <string name="import_btn">Import</string>
     <string name="export_btn">Export</string>
     <string name="failedtogetroot">Failed to get root permissions.</string>
-    <string name="modulenotfound">Re-Malwack module is not found, please install it and try again</string>
+    <string name="modulenotfound">The Re-Malwack module is not present in your device, please install it and try again</string>
     <string name="closetheapp">Close the app</string>
     <string name="successstartingkatamari">Successfully started Katamari service.</string>
     <string name="failureinstartingkatamari">Failed to start Katamari service, please try again.</string>

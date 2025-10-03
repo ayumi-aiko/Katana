@@ -20,13 +20,8 @@ class MainActivity : AppCompatActivity() {
     external fun importPackageList(): Int;
     external fun exportPackageList(): Int;
     external fun doesModuleExists(): Boolean;
-    //funcs
-    fun Context.toast(resId: Int) =
-        Toast.makeText(this, getString(resId), Toast.LENGTH_SHORT).show()
-
-    fun Context.toast(text: String) =
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
-
+    fun Context.toast(resId: Int) = Toast.makeText(this, getString(resId), Toast.LENGTH_SHORT).show()
+    fun Context.toast(text: String) = Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -112,7 +107,7 @@ class MainActivity : AppCompatActivity() {
         }
         importButton.setOnClickListener {
             toast(R.string.importpkglists);
-            val messageRes = when (importPackageList()) {
+            val messageRes = when(importPackageList()) {
                 0 -> R.string.successfullyimportpkglists;
                 1 -> R.string.failedtoimportpkglists;
                 41 -> R.string.failedtoremovetempfile;

@@ -14,7 +14,7 @@ const char *currentDaemonPIDFile = "/data/adb/Re-Malwack/currentDaemonPID";
 const char *daemonStarterScript = "/data/adb/Re-Malwack/daemonStarter";
 
 JNIEXPORT jboolean JNICALL Java_ishimi_katamari_MainActivity_testRoot(JNIEnv *env, jobject thiz) {
-    return (system("su -c echo hi") == 0);
+    return (executeShellCommand("su", (const char*[]) {"su","-c","echo","hi",NULL},false) == 0);
 }
 
 JNIEXPORT jboolean JNICALL Java_ishimi_katamari_MainActivity_isDaemonEnabled(JNIEnv *env, jobject thiz) {
@@ -25,7 +25,7 @@ JNIEXPORT jboolean JNICALL Java_ishimi_katamari_MainActivity_isDaemonEnabled(JNI
 }
 
 JNIEXPORT jboolean JNICALL Java_ishimi_katamari_MainActivity_manageDaemon(JNIEnv *env, jobject thiz, jboolean enableDaemon) {
-    if(enableDaemon) return (system(daemonStarterScript) == 0 && putConfig("enableDaemon", 1) == 0);
+    if(enableDaemon) return (executeShellCommand("su", (const char*[]) {"su","-c",daemonStarterScript,NULL},false) == 0 && putConfig("enableDaemon", 1) == 0);
     else {
         getTemporaryAccess(currentDaemonPIDFile, true);
         getTemporaryAccess(currentDaemonPIDFile, false);
@@ -34,9 +34,9 @@ JNIEXPORT jboolean JNICALL Java_ishimi_katamari_MainActivity_manageDaemon(JNIEnv
             zeynaLog(LOG_LEVEL_INFO, "JNI-manageDaemon()", "Daemon PID file not found, assuming it's not running.");
             return (putConfig("enableDaemon", 0) == 0);
         }
-        char buffer[1000];
+        char buffer[2048];
         char *endptr;
-        if(fgets(buffer, sizeof(buffer), fptr) != NULL) {
+        if(fgets(buffer, sizeof(buffer), fptr)) {
             long pid_long = strtol(buffer, &endptr, 10);
             if(endptr == buffer || *endptr != '\0' || pid_long <= 0) zeynaLog(LOG_LEVEL_WARN, "JNI-manageDaemon()", "Invalid PID found in file: %s", buffer);
             else {
@@ -72,13 +72,13 @@ JNIEXPORT jboolean JNICALL Java_ishimi_katamari_MainActivity_removePackageFromLi
 JNIEXPORT jint JNICALL Java_ishimi_katamari_MainActivity_importPackageList(JNIEnv *env, jobject thiz) {
     // signal failure to grab via return state! IOException == 127
     if(getTemporaryAccess(daemonPackageLists, true) != 0) return 41; // 41 UNC PLUGGNB RAPPER 🔥🔥🔥🔥🔥🔥🔥
-    if(getTemporaryAccess(daemonPackageLists, false) != 0) return 66;
+    if(getTemporaryAccess(daemonPackageLists, false) != 0) return 66; // MARK OF THE BEAST REF 🤑🤑🤑🤑
     // anyways, we got the file now.... BOIIIII THE RETURN CODE SOOO TUFFF 🔥🔥🔥🔥🔥🔥🔥
-    if(executeShellCommand("su",(const char *[]) {"su","-c","[ -f /sdcard/katana.pkg ]",NULL}, false) != 0) return 67;
+    if(executeShellCommand("su",(const char *[]) {"su","-c","[ -f /sdcard/katana.pkg ]",NULL},false) != 0) return 67;
     // now copy it and call it a dayy..
     // signal the dawn import status by touching a file, we are just letting the daemon know that we are in the process of import.
     eraseFileContentEvilTwin(daemonLockFileStuck);
-    if(executeShellCommand("su",(const char *[]) {"su","-c","cp", "-af", tempFileFromPackage, daemonPackageLists, NULL}, false) == 0) {
+    if(executeShellCommand("su",(const char *[]) {"su","-c","cp","-af",tempFileFromPackage,daemonPackageLists,NULL},false) == 0) {
         removeFile(daemonLockFileStuck);
         eraseFileContentEvilTwin(daemonLockFileSuccess);
         return 0;
@@ -89,16 +89,15 @@ JNIEXPORT jint JNICALL Java_ishimi_katamari_MainActivity_importPackageList(JNIEn
 }
 
 JNIEXPORT jint JNICALL Java_ishimi_katamari_MainActivity_exportPackageList(JNIEnv *env, jobject thiz) {
-    int status = executeShellCommand("su",(const char*[]){"su","-c","cp","-af", daemonPackageLists, "/sdcard/katana.pkg", NULL},false);
-    return status;
+    return executeShellCommand("su",(const char*[]){"su","-c","cp","-af",daemonPackageLists,"/sdcard/katana.pkg",NULL},false);
 }
 
 JNIEXPORT jboolean JNICALL Java_ishimi_katamari_MainActivity_doesModuleExists(JNIEnv *env, jobject thiz) {
-    FILE *fptr = fopen("/data/adb/Re-Malwack/module.prop", "r");
-    if(!fptr) {
-        zeynaLog(LOG_LEVEL_ERROR, "doesModuleExists()", "Failed to open the module property file, please open the app again or just install Re-Malwack to proceed!");
+    // lord oh lord. Here we go again.
+    if(executeShellCommand("su",(const char*[]){"su","-c","[ -f /data/adb/Re-Malwack/module.prop ]",NULL},false) != 0) {
+        zeynaLog(LOG_LEVEL_ERROR, "doesModuleExists()", "Failed to open the module property file or the module doesn't exist.");
         return JNI_FALSE;
     }
-    fclose(fptr);
+    zeynaLog(LOG_LEVEL_ERROR, "doesModuleExists()", "Re-Malwack is installed, thank you 🥰");
     return JNI_TRUE;
 }

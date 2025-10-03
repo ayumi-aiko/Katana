@@ -12,7 +12,7 @@ int putConfig(const char *variableName, int variableValue) {
         return 127;
     }
     // vars:
-    char contentFromFile[10000];
+    char contentFromFile[1024];
     char **contentsOfConfig = malloc(400 * sizeof(char *));
     int array = 0;
     int arrayIndexOfVariable = -1;
@@ -66,21 +66,8 @@ int putConfig(const char *variableName, int variableValue) {
 }
 
 int getTemporaryAccess(const char *filePath, bool removeTempFile) {
-    int ret = 0;
-    if(removeTempFile) {
-        if(system("su -c 'rm -rf tempFileFromPackage'") != 0) return 125;
-    }
-    else {
-        char *cmd = combineStringsFormatted("su -c 'cp -af \"%s\" tempFileFromPackage'",filePath);
-        if(!cmd) return 127;
-        ret = system(cmd);
-        if(ret != 0) {
-            free(cmd);
-            return 127;
-        }
-        free(cmd);
-    }
-    return ret;
+    if(removeTempFile) return executeShellCommand("su", (const char*[]) {"su","-c","rm","-rf","tempFileFromPackage",NULL},false);
+    else return executeShellCommand("su", (const char*[]) {"su","-c","cp","-af", filePath, "tempFileFromPackage", NULL},false);
 }
 
 // effectively, let's just use shell commands to copy the dawn file.
